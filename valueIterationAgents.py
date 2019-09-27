@@ -49,7 +49,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           Some useful mdp methods you will use:
               mdp.getStates()
               mdp.getPossibleActions(state)
-              mdp.getTransitionStatesAndProbs(state, action)
+              mdp.getTransitionStatesAndProbs(state, action) --> Returns list of (nextState, prob) pairs
               mdp.getReward(state, action, nextState)
               mdp.isTerminal(state)
         """
@@ -77,6 +77,15 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
+        listOfStatesAndProbs = []
+        listOfStatesAndProbs = self.mdp.getTransitionStatesAndProbs(state, action) # [(state,prob)]
+        q = 0.0
+        for i in range(listOfStatesAndProbs.size()):
+            nextState = listOfStatesAndProbs[i][0]
+            p = listOfStatesAndProbs[i][1]
+            r = self.mdp.getReward(state, action, nextState)
+            q += p * (r + self.discount * self.values[nextState])
+        return q
         util.raiseNotDefined()
 
     def computeActionFromValues(self, state):
@@ -88,6 +97,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
+        
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
 
