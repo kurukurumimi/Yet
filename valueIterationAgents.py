@@ -62,11 +62,31 @@ class ValueIterationAgent(ValueEstimationAgent):
     def runValueIteration(self):
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        #print("iter: ", self.iterations)
         for iter in range(self.iterations):
-            s0 = self.mdp.getStates()
-            a0 = computeActionFromValues(s0)
-            computeQValueFromValues(s0,a0)
-            while(self.mdp.isTerminal)
+            #print("Iteration: ",iter)
+            S = self.mdp.getStates()
+            
+            # print(S)  S:   ['TERMINAL_STATE', (0, 0), (0, 1), (0, 2)]
+            # A = {'exit','north','west','south','east'}
+            # A = 'exit' takes current state to terminal state and reward is 10
+            # 'TERMINAL_STATE' loops forever with reward 0
+            # self.values is a dictionary 
+
+
+            # print(self.mdp.getPossibleActions(S[1]))
+            # print(len(self.mdp.getPossibleActions(S[1])))
+            # print(self.computeActionFromValues(S[1]))
+            # print(self.mdp.getTransitionStatesAndProbs(S[1], 'exit'))
+            # print(self.mdp.getReward(S[1], 'exit', S[0]))
+            # print("values ",self.values)
+            tmp_values = util.Counter()
+            for i in range(len(S)):
+                a_star = self.computeActionFromValues(S[i])
+                #print(i,"-th action: ",a_star)
+                tmp_values[S[i]] = self.computeQValueFromValues(S[i],a_star)
+                #print("value: ",self.computeQValueFromValues(S[i],a_star))
+            self.values = tmp_values
 
     def getValue(self, state):
         """
@@ -81,10 +101,16 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
+        if(self.mdp.isTerminal(state)):
+            return 0.0
         listOfStatesAndProbs = []
         listOfStatesAndProbs = self.mdp.getTransitionStatesAndProbs(state, action) # [(state,prob)]
+        # print("state: ", state)
+        # print("action: ", action)
+        # print(listOfStatesAndProbs)
+        # print("Length: ",len(listOfStatesAndProbs))
         q = 0.0
-        for i in range(listOfStatesAndProbs.size()):
+        for i in range(len(listOfStatesAndProbs)):
             nextState = listOfStatesAndProbs[i][0]
             p = listOfStatesAndProbs[i][1]
             r = self.mdp.getReward(state, action, nextState)
@@ -101,13 +127,19 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
+        
+        if(self.mdp.isTerminal(state)):
+            return None
+        #print(state)
         A = self.mdp.getPossibleActions(state)
+        # print("state: ", state)
+        # print("Action: ", A)
         Q = []
         index = 0
         q = 0.0
         for i in range(len(A)):
-            if(q < computeQValueFromValues(state,A[i])):
-                q = computeQValueFromValues(state,A[i]) 
+            if(q < self.computeQValueFromValues(state,A[i])):
+                q = self.computeQValueFromValues(state,A[i]) 
                 index = i
         return A[index]    
         
