@@ -72,9 +72,22 @@ class ValueIterationAgent(ValueEstimationAgent):
             # A = 'exit' takes current state to terminal state and reward is 10
             # 'TERMINAL_STATE' loops forever with reward 0
             # self.values is a dictionary 
+            # for i in range(len(S)):
 
+            
+            # test/p1/3 
+            # ['TERMINAL_STATE', (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), 
+            # (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), 
+            # (2, 1), (2, 2), (2, 3), (2, 4), (2, 5)]
 
-            # print(self.mdp.getPossibleActions(S[1]))
+            #print( self.mdp.getPossibleActions((2,1)) )
+            # for i in range(len(S)):
+            #     print("state ",S[i]," ",self.mdp.getPossibleActions(S[i]),"\n")
+            #     for j in range(len(S)):
+            #         if( self.mdp.getReward(S[i], 'south', S[j])  == 10):
+            #             print("i: ",i," j: ",j)
+
+            # print(self.mdp.getPossibleActions(S[0]))
             # print(len(self.mdp.getPossibleActions(S[1])))
             # print(self.computeActionFromValues(S[1]))
             # print(self.mdp.getTransitionStatesAndProbs(S[1], 'exit'))
@@ -109,12 +122,13 @@ class ValueIterationAgent(ValueEstimationAgent):
         # print("action: ", action)
         # print(listOfStatesAndProbs)
         # print("Length: ",len(listOfStatesAndProbs))
-        q = 0.0
+        q = 0
         for i in range(len(listOfStatesAndProbs)):
             nextState = listOfStatesAndProbs[i][0]
             p = listOfStatesAndProbs[i][1]
             r = self.mdp.getReward(state, action, nextState)
             q += p * (r + self.discount * self.values[nextState])
+        
         return q
         #util.raiseNotDefined()
 
@@ -134,14 +148,15 @@ class ValueIterationAgent(ValueEstimationAgent):
         A = self.mdp.getPossibleActions(state)
         # print("state: ", state)
         # print("Action: ", A)
-        Q = []
+        
         index = 0
-        q = 0.0
+        q = -888888888.0
         for i in range(len(A)):
             if(q < self.computeQValueFromValues(state,A[i])):
                 q = self.computeQValueFromValues(state,A[i]) 
                 index = i
         return A[index]    
+
         
         
         "*** YOUR CODE HERE ***"
